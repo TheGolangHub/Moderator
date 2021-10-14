@@ -1,0 +1,6 @@
+# Config Vars
+bot-token: "bot token here"
+db-uri: "db uri here"
+rule-key: "rule key"
+tg-api-url: "https://api.telegram.org"
+chat-id: "-1001556376215"

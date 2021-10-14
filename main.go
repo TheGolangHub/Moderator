@@ -4,8 +4,14 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
+
+	"github.com/robfig/cron/v3"
 
 	"github.com/TheGolangHub/Moderator/bot"
+	"github.com/TheGolangHub/Moderator/bot/utils/data"
+	"github.com/TheGolangHub/Moderator/config"
 
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
@@ -13,9 +19,9 @@ import (
 )
 
 func main() {
+	data.StoreOutFile()
 	// Create bot from environment value.
-	b, err := gotgbot.NewBot(os.Getenv("BOT_TOKEN"), &gotgbot.BotOpts{
-		APIURL:      "http://localhost:8081",
+	b, err := gotgbot.NewBot(config.TOKEN, &gotgbot.BotOpts{
 		Client:      http.Client{},
 		GetTimeout:  gotgbot.DefaultGetTimeout,
 		PostTimeout: gotgbot.DefaultPostTimeout,
@@ -23,6 +29,7 @@ func main() {
 	if err != nil {
 		panic("failed to create new bot: " + err.Error())
 	}
+	bot.Admins, _ = b.GetChatAdministrators(config.CHAT_ID)
 
 	// Create updater and dispatcher.
 	updater := ext.NewUpdater(&ext.UpdaterOpts{
@@ -49,6 +56,18 @@ func main() {
 		panic("failed to start polling: " + err.Error())
 	}
 	fmt.Printf("%s has been started...\n", b.User.Username)
+
+	c := make(chan os.Signal)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-c
+		data.SaveInFile()
+		os.Exit(1)
+	}()
+
+	cron := cron.New()
+	cron.AddFunc("@every 60m", func() { data.SaveInFile() })
+	cron.Start()
 
 	// Idle, to keep updates coming in, and avoid bot stopping.
 	updater.Idle()
