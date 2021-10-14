@@ -17,6 +17,9 @@ func RefreshAdmins(b *gotgbot.Bot, ctx *ext.Context) error {
 }
 
 func IsUserAdmin(bot *gotgbot.Bot, ctx *ext.Context) bool {
+	if ctx.EffectiveUser.Id == 1087968824 {
+		return true
+	}
 	member, err := ctx.EffectiveChat.GetMember(bot, ctx.EffectiveUser.Id)
 	if err != nil {
 		log.Println(err.Error())

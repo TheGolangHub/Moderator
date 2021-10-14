@@ -87,8 +87,12 @@ func loadBlist(dispatcher *ext.Dispatcher) {
 		if !message.Text(msg) {
 			return false
 		}
+		sep := " "
+		if len(strings.Split(msg.Text, " ")) < 2 {
+			sep = ""
+		}
 		for _, x := range data.OffTalk {
-			if strings.Contains(strings.ToLower(msg.Text), x) {
+			if strings.Contains(strings.ToLower(msg.Text)+sep, x) {
 				return true
 			}
 		}
