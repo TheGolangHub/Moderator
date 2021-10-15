@@ -73,12 +73,8 @@ func loadBlist(dispatcher *ext.Dispatcher) {
 		if !message.Text(msg) {
 			return false
 		}
-		sep := " "
-		if len(strings.Split(msg.Text, " ")) < 2 {
-			sep = ""
-		}
 		for _, x := range data.ProfanityList {
-			if strings.Contains(strings.ToLower(msg.Text)+sep, x) {
+			if utils.StringContainWord(strings.ToLower(msg.Text), x) {
 				return true
 			}
 		}
@@ -91,12 +87,8 @@ func loadBlist(dispatcher *ext.Dispatcher) {
 		if !message.Text(msg) {
 			return false
 		}
-		sep := " "
-		if len(strings.Split(msg.Text, " ")) < 2 {
-			sep = ""
-		}
 		for _, x := range data.OffTalk {
-			if strings.Contains(strings.ToLower(msg.Text)+sep, x) {
+			if utils.StringContainWord(strings.ToLower(msg.Text), x) {
 				return true
 			}
 		}

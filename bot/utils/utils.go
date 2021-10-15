@@ -15,3 +15,13 @@ func MentionUser(u *gotgbot.User, pmode string) string {
 		return fmt.Sprintf("[%s](tg://user?id=%d)", u.FirstName, u.Id)
 	}
 }
+
+func StringContainWord(s string, word string) bool {
+	s = strings.ToLower(s)
+	for _, i := range strings.Fields(s) {
+		if i == word {
+			return true
+		}
+	}
+	return false
+}
