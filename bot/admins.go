@@ -1,8 +1,6 @@
 package bot
 
 import (
-	"log"
-
 	"github.com/PaulSonOfLars/gotgbot/v2"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext"
 	"github.com/PaulSonOfLars/gotgbot/v2/ext/handlers"
@@ -16,17 +14,12 @@ func RefreshAdmins(b *gotgbot.Bot, ctx *ext.Context) error {
 	return nil
 }
 
-func IsUserAdmin(bot *gotgbot.Bot, ctx *ext.Context) bool {
-	if ctx.EffectiveUser.Id == 1087968824 {
+func IsUserAdmin(userId int64) bool {
+	if userId == 1087968824 || userId == 777000 {
 		return true
 	}
-	member, err := ctx.EffectiveChat.GetMember(bot, ctx.EffectiveUser.Id)
-	if err != nil {
-		log.Println(err.Error())
-		return false
-	}
 	for _, x := range Admins {
-		if x == member {
+		if x.GetUser().Id == userId {
 			return true
 		}
 	}

@@ -17,7 +17,7 @@ import (
 )
 
 func profanityCheck(b *gotgbot.Bot, ctx *ext.Context) error {
-	if IsUserAdmin(b, ctx) {
+	if IsUserAdmin(ctx.EffectiveUser.Id) {
 		return ext.EndGroups
 	}
 	msg := ctx.EffectiveMessage
@@ -42,7 +42,7 @@ func profanityCheck(b *gotgbot.Bot, ctx *ext.Context) error {
 }
 
 func offTopicChat(b *gotgbot.Bot, ctx *ext.Context) error {
-	if IsUserAdmin(b, ctx) {
+	if IsUserAdmin(ctx.EffectiveUser.Id) {
 		return ext.EndGroups
 	}
 	ctx.EffectiveMessage.Delete(b)
@@ -73,8 +73,12 @@ func loadBlist(dispatcher *ext.Dispatcher) {
 		if !message.Text(msg) {
 			return false
 		}
+		sep := " "
+		if len(strings.Split(msg.Text, " ")) < 2 {
+			sep = ""
+		}
 		for _, x := range data.ProfanityList {
-			if strings.Contains(strings.ToLower(msg.Text), x) {
+			if strings.Contains(strings.ToLower(msg.Text)+sep, x) {
 				return true
 			}
 		}

@@ -16,7 +16,7 @@ import (
 )
 
 func userReadRules(b *gotgbot.Bot, ctx *ext.Context) error {
-	if IsUserAdmin(b, ctx) {
+	if IsUserAdmin(ctx.EffectiveUser.Id) {
 		return ext.EndGroups
 	}
 	msg := ctx.EffectiveMessage
