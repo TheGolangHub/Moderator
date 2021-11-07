@@ -51,7 +51,7 @@ func main() {
 	bot.Load(dispatcher)
 
 	// Start receiving updates.
-	err = updater.StartPolling(b, &ext.PollingOpts{DropPendingUpdates: true})
+	err = updater.StartPolling(b, &ext.PollingOpts{DropPendingUpdates: false})
 	if err != nil {
 		panic("failed to start polling: " + err.Error())
 	}
